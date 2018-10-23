@@ -7,7 +7,7 @@ Unofficial Python library for Search Guard (a security solution for Elasticsearc
 
 ## Installation ##
 
-**This library requires a Search Guard subscription (or trail license). Information can be found on https://search-guard.com/.**
+**This library requires a Search Guard subscription (or trial license). Information can be found on https://search-guard.com/.**
 
 Make sure enterprise modules are enabled in your elasticsearch.yml:
 
