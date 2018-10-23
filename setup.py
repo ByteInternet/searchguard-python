@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -29,3 +29,4 @@ setup(
         'requests==2.9.1'
     ],
 )
+
