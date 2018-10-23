@@ -1,0 +1,20 @@
+language: python
+python:
+  - "3.7-dev"
+  - "3.6"
+  - "3.5"
+  - "3.4"
+
+install:
+  - "pip install wheel tox"
+  - "pip install -r requirements/development.txt"
+
+script:
+  - "tox"
+  - "python setup.py bdist_wheel -d dist"
+
+after_success:
+  - "pip install dist/*.whl"
+
+notifications:
+  email: false
