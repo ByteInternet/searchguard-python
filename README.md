@@ -1,4 +1,8 @@
 # searchguard-python
+
+[![build status](https://travis-ci.org/ByteInternet/searchguard-python.svg?branch=master)](https://travis-ci.org/ByteInternet/searchguard-python)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 Unofficial Python library for Search Guard (a security solution for Elasticsearch)
 
 ## Installation ##
