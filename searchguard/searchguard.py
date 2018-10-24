@@ -159,3 +159,22 @@ def view_role(role):
     else:
         # Raise exception because the role does not exist
         raise ViewRoleException('Error viewing the role {}, does not exist'.format(role))
+
+
+def view_user(user):
+    """Returns information about a Search Guard user (when the user exists)
+    The returned information contains the password hash and if present an array of the user's backend roles.
+    :param str user: Name of the user to view in Search Guard
+    """
+    if check_user_exists(user) is True:
+        # The user does exist, let's view it
+        view_sg_user = requests.get('{}/internalusers/{}'.format(SGAPI, user), auth=TOKEN)
+
+        if view_sg_user.status_code == 200:
+            return view_sg_user.text
+        else:
+            # Raise exception because we could not view the user
+            raise ViewUserException('Error viewing the user {} - msg {}'.format(user, view_sg_user.text))
+    else:
+        # Raise exception because the user does not exist
+        raise ViewUserException('Error viewing the user {}, does not exist'.format(user))
