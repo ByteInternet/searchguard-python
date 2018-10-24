@@ -21,7 +21,7 @@ def password_generator(size=25, chars=string.ascii_uppercase + string.ascii_lowe
 
 
 def check_user_exists(username):
-    """Returns True of False depending on whether the requested user exists in searchguard"""
+    """Returns True of False depending on whether the requested user exists in Search Guard"""
     user_exists_check = requests.get('{}/internalusers/{}'.format(SGAPI, username), auth=TOKEN)
 
     if user_exists_check.status_code == 200:
@@ -36,7 +36,7 @@ def check_user_exists(username):
 
 
 def check_role_exists(role):
-    """Returns True of False depending on whether the requested role exists in searchguard"""
+    """Returns True of False depending on whether the requested role exists in Search Guard"""
     role_exists_check = requests.get('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
 
     if role_exists_check.status_code == 200:
@@ -51,8 +51,7 @@ def check_role_exists(role):
 
 
 def create_user(username):
-    """Create a new searchguard user and return the generated password"""
-
+    """Creates a new Search Guard user and returns the generated password"""
     if check_user_exists(username) is True:
         # Raise exception because the user already exists
         raise CreateUserException('User {} already exists'.format(username))
@@ -64,7 +63,7 @@ def create_user(username):
                                   data=json.dumps(payload), headers=HEADER, auth=TOKEN)
 
     if create_sg_user.status_code == 201:
-        # User created succesfully
+        # User created successfully
         return password
     else:
         # Raise exception because we received an error when creating the user
@@ -72,7 +71,7 @@ def create_user(username):
 
 
 def delete_user(username):
-    """Deletes a searchguard user. Returns when successfully deleted"""
+    """Deletes a Search Guard user. Returns when successfully deleted"""
     if not check_user_exists(username):
         # Raise exception because the user does not exist
         raise DeleteUserException('Error deleting the user {}, does not exist'.format(username))
@@ -86,7 +85,11 @@ def delete_user(username):
 
 
 def create_role(role, permissions=None):
-    """Creates a searchguard role. Returns when successfully created"""
+    """Creates a Search Guard role. Returns when successfully created
+    When no permissions are specified, we use some default cluster permissions.
+    :param str role: Name of the role to create in Search Guard
+    :param dict permissions: Search Guard role permissions (default is read access to cluster)
+    """
     if check_role_exists(role) is False:
         # The role does not exist, let's create it
         # When no permissions are requested, we only add basic cluster perms, no indice perms.
@@ -97,7 +100,7 @@ def create_role(role, permissions=None):
                                       data=json.dumps(payload), headers=HEADER, auth=TOKEN)
 
         if create_sg_role.status_code == 201:
-            # Role created succesfully
+            # Role created successfully
             return
         else:
             # Raise exception because we received an error when creating the role
@@ -108,14 +111,14 @@ def create_role(role, permissions=None):
 
 
 def modify_role(role, permissions):
-    """Modifies a searchguard role. Returns when successfully modified"""
+    """Modifies a Search Guard role. Returns when successfully modified"""
     if check_role_exists(role) is True:
         # The role does exist, let's modify it
         modify_sg_role = requests.put('{}/roles/{}'.format(SGAPI, role),
                                       data=json.dumps(permissions), headers=HEADER, auth=TOKEN)
 
         if modify_sg_role.status_code == 200:
-            # Role modified succesfully
+            # Role modified successfully
             return
         else:
             # Raise exception because we received an error when modifying the role
@@ -126,13 +129,13 @@ def modify_role(role, permissions):
 
 
 def delete_role(role):
-    """Deletes a searchguard roles. Returns when successfully deleted"""
+    """Deletes a Search Guard roles. Returns when successfully deleted"""
     if check_role_exists(role) is True:
         # The role does exist, let's delete it
         delete_sg_role = requests.delete('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
 
         if delete_sg_role.status_code == 200:
-            # Role deleted succesfully
+            # Role deleted successfully
             return
         else:
             # Raise exception because we could not delete the role
