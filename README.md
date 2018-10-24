@@ -19,7 +19,13 @@ Make sure backend role management in your elasticsearch.yml is set to either of 
 
 Install the library:
 
-    pip install searchguard
+    pip3 install searchguard
+
+Set the environment variables
+
+    export SEARCHGUARD_API_URL="https://www.example.com:1234/"
+    export SEARCHGUARD_API_USER="foo"
+    export SEARCHGUARD_API_PASS="bar"
 
 ## Work in progress ##
 
