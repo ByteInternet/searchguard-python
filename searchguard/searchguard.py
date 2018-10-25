@@ -52,7 +52,7 @@ def check_role_exists(role):
 
 def create_user(username):
     """Creates a new Search Guard user and returns the generated password"""
-    if check_user_exists(username) is True:
+    if check_user_exists(username):
         # Raise exception because the user already exists
         raise CreateUserException('User {} already exists'.format(username))
 
@@ -90,7 +90,7 @@ def create_role(role, permissions=None):
     :param str role: Name of the role to create in Search Guard
     :param dict permissions: Search Guard role permissions (default is read access to cluster)
     """
-    if check_role_exists(role) is False:
+    if not check_role_exists(role):
         # The role does not exist, let's create it
         # When no permissions are requested, we only add basic cluster perms, no indice perms.
         payload = {'cluster': ["indices:data/read/mget", "indices:data/read/msearch"]}
@@ -112,7 +112,7 @@ def create_role(role, permissions=None):
 
 def modify_role(role, permissions):
     """Modifies a Search Guard role. Returns when successfully modified"""
-    if check_role_exists(role) is True:
+    if check_role_exists(role):
         # The role does exist, let's modify it
         modify_sg_role = requests.put('{}/roles/{}'.format(SGAPI, role),
                                       data=json.dumps(permissions), headers=HEADER, auth=TOKEN)
@@ -130,7 +130,7 @@ def modify_role(role, permissions):
 
 def delete_role(role):
     """Deletes a Search Guard roles. Returns when successfully deleted"""
-    if check_role_exists(role) is True:
+    if check_role_exists(role):
         # The role does exist, let's delete it
         delete_sg_role = requests.delete('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
 
@@ -147,7 +147,7 @@ def delete_role(role):
 
 def view_role(role):
     """Returns the permissions for the requested role if it exists"""
-    if check_role_exists(role) is True:
+    if check_role_exists(role):
         # The role does exist, let's view it
         view_sg_role = requests.get('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
 
