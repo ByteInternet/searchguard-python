@@ -166,7 +166,7 @@ def view_user(user):
     The returned information contains the password hash and if present an array of the user's backend roles.
     :param str user: Name of the user to view in Search Guard
     """
-    if check_user_exists(user) is True:
+    if check_user_exists(user):
         # The user does exist, let's view it
         view_sg_user = requests.get('{}/internalusers/{}'.format(SGAPI, user), auth=TOKEN)
 
