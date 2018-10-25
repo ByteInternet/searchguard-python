@@ -159,3 +159,31 @@ def view_role(role):
     else:
         # Raise exception because the role does not exist
         raise ViewRoleException('Error viewing the role {}, does not exist'.format(role))
+
+
+def list_users(prefix=None, search=None):
+    """Returns the existing Search Guard users that match the filter criteria
+    When no filters are specified, all users are returned.
+    :param str prefix: Return only users that match this prefix (underscore is used as delimiter)
+    :param str search: Return only users that contain this search string
+    """
+    response = requests.get('{}/internalusers/'.format(SGAPI), auth=TOKEN)
+
+    if response.status_code == 200:
+        list_sg_users = json.loads(response.text)
+        # The API returned a list of existing users
+        if prefix and search:
+            # Return list of users filtered on prefix and search string
+            return {k: v for (k, v) in list_sg_users.items() if k.split('_')[0] == prefix and search in k}
+        if prefix:
+            # Return list of users filtered on prefix
+            return {k: v for (k, v) in list_sg_users.items() if k.split('_')[0] == prefix}
+        if search:
+            # Return list of users filtered on search string
+            return {k: v for (k, v) in list_sg_users.items() if search in k}
+
+        # Return all existing users (unfiltered)
+        return list_sg_users
+    else:
+        # Raise exception because the API did not return code 200
+        raise ListUsersException('Error listing users - msg {}'.format(response.text))

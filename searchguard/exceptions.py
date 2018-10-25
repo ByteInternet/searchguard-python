@@ -26,6 +26,10 @@ class ModifyRoleException(SearchGuardException):
     pass
 
 
+class ListUsersException(SearchGuardException):
+    pass
+
+
 class CheckUserExistsException(SearchGuardException):
     pass
 
