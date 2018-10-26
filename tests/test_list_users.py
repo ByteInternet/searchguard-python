@@ -17,7 +17,10 @@ class TestListUsers(BaseTestCase):
         self.user_list_pt1 = {"dummyuser1": {"hash": "123"}}
         self.user_list_pt2 = {"999_dummyuser2": {"hash": "456", "roles": ["dummyrole2"]}}
         self.user_list_pt3 = {"999_someuser3": {"hash": "789", "username": "dummy.user3"}}
-        self.user_list = dict(self.user_list_pt1, **self.user_list_pt2, **self.user_list_pt3)
+
+        # To maintain Python 3.4 compatibility:
+        self.user_list = {}
+        self.user_list.update(self.user_list_pt1, **dict(self.user_list_pt2, **self.user_list_pt3))
 
         self.mocked_requests_get = self.set_up_patch('searchguard.searchguard.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200, text=json.dumps(self.user_list))
