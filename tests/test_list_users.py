@@ -27,26 +27,27 @@ class TestListUsers(BaseTestCase):
 
     def test_list_users_returns_all_users_when_called_without_filters(self):
         ret = list_users()
-        assert ret == self.user_list
+
+        self.assertEqual(ret, self.user_list)
 
     def test_list_users_returns_only_matching_users_when_prefix_is_used(self):
         user_list_filtered = dict(self.user_list_pt2, **self.user_list_pt3)
 
         ret = list_users(prefix='999')
 
-        assert ret == user_list_filtered
+        self.assertEqual(ret, user_list_filtered)
 
     def test_list_users_returns_only_matching_users_when_search_is_used(self):
         user_list_filtered = dict(self.user_list_pt1, **self.user_list_pt2)
 
         ret = list_users(search='dummyuser')
 
-        assert ret == user_list_filtered
+        self.assertEqual(ret, user_list_filtered)
 
     def test_list_users_returns_only_matching_users_when_both_prefix_and_search_are_used(self):
         ret = list_users(prefix='999', search='dummyuser')
 
-        assert ret == self.user_list_pt2
+        self.assertEqual(ret, self.user_list_pt2)
 
     def test_list_users_returns_exception_when_requests_return_code_not_200(self):
         self.mocked_requests_get.return_value = Mock(status_code=999)

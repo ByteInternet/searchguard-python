@@ -186,4 +186,4 @@ def list_users(prefix=None, search=None):
         return list_sg_users
     else:
         # Raise exception because the API did not return code 200
-        raise ListUsersException('Error listing users - msg {}'.format(response.text))
+        raise ListUsersException('Error listing users. status: {} - body: {}'.format(response.status_code, response.text))
