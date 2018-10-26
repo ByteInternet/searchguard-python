@@ -23,13 +23,19 @@ Install the library:
 
 Set the environment variables
 
-    export SEARCHGUARD_API_URL="https://www.example.com:1234/"
+    export SEARCHGUARD_API_URL="https://www.example.com:1234/_searchguard/api"
     export SEARCHGUARD_API_USER="foo"
     export SEARCHGUARD_API_PASS="bar"
 
-## Work in progress ##
+## Future work ##
 
 * Add code for managing rolesmapping
 * Add code for managing actiongroups
 * Allow password customization (e.g. length)
 * Add optional password argument to create_user
+
+## Legal
+
+* Elasticsearch is a trademark of Elasticsearch BV, registered in the U.S. and in other countries.
+* Search Guard is a trademark of floragunn GmbH, registered in the U.S. and in other countries.
+* Byte Internet is not affiliated with either Elasticsearch BV / floragunn GmbH.
