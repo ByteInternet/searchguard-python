@@ -22,6 +22,10 @@ class ViewRoleException(SearchGuardException):
     pass
 
 
+class ViewUserException(SearchGuardException):
+    pass
+
+
 class ModifyRoleException(SearchGuardException):
     pass
 
