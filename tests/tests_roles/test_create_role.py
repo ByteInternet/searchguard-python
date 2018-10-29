@@ -4,7 +4,7 @@ import json
 import unittest.mock as mock
 from tests.helper import BaseTestCase
 from unittest.mock import Mock
-from searchguard.searchguard import create_role
+from searchguard.roles import create_role
 from searchguard.exceptions import CreateRoleException
 
 
@@ -15,11 +15,11 @@ class TestCreateRole(BaseTestCase):
         self.permissions = {"cluster": ["dummyperm"], "indices": {"dummyindice": {"dummytype": ["READ"]}}}
         self.defaultperms = {"cluster": ["indices:data/read/mget", "indices:data/read/msearch"]}
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.roles.SGAPI', "fake_api_url")
 
-        self.mocked_requests_put = self.set_up_patch('searchguard.searchguard.requests.put')
+        self.mocked_requests_put = self.set_up_patch('searchguard.roles.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=201)
-        self.mocked_check_role_exists = self.set_up_patch('searchguard.searchguard.check_role_exists')
+        self.mocked_check_role_exists = self.set_up_patch('searchguard.roles.check_role_exists')
         self.mocked_check_role_exists.return_value = False
 
     def test_create_role_returns_when_successfully_created_role(self):

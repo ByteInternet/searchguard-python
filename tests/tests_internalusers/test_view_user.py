@@ -3,7 +3,7 @@
 import unittest.mock as mock
 from unittest.mock import Mock
 from tests.helper import BaseTestCase
-from searchguard.searchguard import view_user
+from searchguard.internalusers import view_user
 from searchguard.exceptions import ViewUserException
 
 
@@ -13,11 +13,11 @@ class TestViewUser(BaseTestCase):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
         self.user_data = {"DummyUser": {"roles": ["BackendRole"], "hash": "hash1234"}}
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
 
-        self.mocked_requests_get = self.set_up_patch('searchguard.searchguard.requests.get')
+        self.mocked_requests_get = self.set_up_patch('searchguard.internalusers.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)
-        self.mocked_check_user_exists = self.set_up_patch('searchguard.searchguard.check_user_exists')
+        self.mocked_check_user_exists = self.set_up_patch('searchguard.internalusers.check_user_exists')
         self.mocked_check_user_exists.return_value = True
 
     def test_view_user_returns_user_information_when_correctly_called(self):

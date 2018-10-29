@@ -4,7 +4,7 @@ import json
 import unittest.mock as mock
 from unittest.mock import Mock
 from tests.helper import BaseTestCase
-from searchguard.searchguard import list_users
+from searchguard.internalusers import list_users
 from searchguard.exceptions import ListUsersException
 
 
@@ -12,7 +12,7 @@ class TestListUsers(BaseTestCase):
 
     def setUp(self):
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
 
         self.user_list_pt1 = {"dummyuser1": {"hash": "123"}}
         self.user_list_pt2 = {"999_dummyuser2": {"hash": "456", "roles": ["dummyrole2"]}}
@@ -22,7 +22,7 @@ class TestListUsers(BaseTestCase):
         self.user_list = {}
         self.user_list.update(self.user_list_pt1, **dict(self.user_list_pt2, **self.user_list_pt3))
 
-        self.mocked_requests_get = self.set_up_patch('searchguard.searchguard.requests.get')
+        self.mocked_requests_get = self.set_up_patch('searchguard.internalusers.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200, text=json.dumps(self.user_list))
 
     def test_list_users_returns_all_users_when_called_without_filters(self):
