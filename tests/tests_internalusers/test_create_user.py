@@ -4,7 +4,7 @@ import json
 import unittest.mock as mock
 from tests.helper import BaseTestCase
 from unittest.mock import patch, Mock
-from searchguard.searchguard import create_user, password_generator
+from searchguard.internalusers import create_user, password_generator
 from searchguard.exceptions import CreateUserException
 
 
@@ -13,14 +13,14 @@ class TestCreateUser(BaseTestCase):
     def setUp(self):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
 
-        self.mocked_requests_put = self.set_up_patch('searchguard.searchguard.requests.put')
+        self.mocked_requests_put = self.set_up_patch('searchguard.internalusers.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=201)
-        self.mocked_check_user_exists = self.set_up_patch('searchguard.searchguard.check_user_exists')
+        self.mocked_check_user_exists = self.set_up_patch('searchguard.internalusers.check_user_exists')
         self.mocked_check_user_exists.return_value = False
 
-    @patch('searchguard.searchguard.password_generator')
+    @patch('searchguard.internalusers.password_generator')
     def test_create_user_returns_correct_password_when_successfully_created_user(self, mock_password_generator):
         mock_password_generator.return_value = "abc1234"
 
@@ -51,7 +51,7 @@ class TestCreateUser(BaseTestCase):
         create_user(self.user)
         self.assertTrue(password_generator())
 
-    @patch('searchguard.searchguard.password_generator')
+    @patch('searchguard.internalusers.password_generator')
     def test_create_user_calls_requests_with_correct_arguments(self, mock_password_generator):
         mock_password_generator.return_value = "abc1234"
 

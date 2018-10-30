@@ -3,7 +3,7 @@
 import unittest.mock as mock
 from unittest.mock import Mock
 from tests.helper import BaseTestCase
-from searchguard.searchguard import check_role_exists
+from searchguard.roles import check_role_exists
 from searchguard.exceptions import CheckRoleExistsException
 
 
@@ -12,9 +12,9 @@ class TestCheckRoleExists(BaseTestCase):
     def setUp(self):
         self.role = "DummyRole"
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.roles.SGAPI', "fake_api_url")
 
-        self.mocked_requests_get = self.set_up_patch('searchguard.searchguard.requests.get')
+        self.mocked_requests_get = self.set_up_patch('searchguard.roles.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)
 
     def test_check_role_exists_calls_requests_with_correct_arguments(self):

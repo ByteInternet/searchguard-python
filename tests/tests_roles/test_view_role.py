@@ -3,7 +3,7 @@
 import unittest.mock as mock
 from unittest.mock import Mock
 from tests.helper import BaseTestCase
-from searchguard.searchguard import view_role
+from searchguard.roles import view_role
 from searchguard.exceptions import ViewRoleException
 
 
@@ -13,11 +13,11 @@ class TestViewRole(BaseTestCase):
         self.role = "DummyRole"
         self.permissions = {"cluster": ["dummyperm"], "indices": {"dummyindice": {"dummytype": ["READ"]}}}
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.searchguard.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.roles.SGAPI', "fake_api_url")
 
-        self.mocked_requests_get = self.set_up_patch('searchguard.searchguard.requests.get')
+        self.mocked_requests_get = self.set_up_patch('searchguard.roles.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)
-        self.mocked_check_role_exists = self.set_up_patch('searchguard.searchguard.check_role_exists')
+        self.mocked_check_role_exists = self.set_up_patch('searchguard.roles.check_role_exists')
         self.mocked_check_role_exists.return_value = True
 
     def test_view_role_returns_role_information_when_correctly_called(self):
