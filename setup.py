@@ -30,6 +30,7 @@ setup(
     name='searchguard',
     version='0.2',
     packages=find_packages(exclude=['tests']),
+    license='MIT',
     url='https://github.com/ByteInternet/searchguard-python',
     author='Jeroen van Heugten',
     author_email='jeroen@byte.nl',
