@@ -27,7 +27,7 @@ setup(
     classifiers=classifiers,
     long_description_content_type="text/markdown",
     install_requires=[
-        'requests==2.9.1'
+        'requests==2.20'
     ],
 )
 
