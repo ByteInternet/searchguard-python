@@ -19,7 +19,7 @@ classifiers = [
 
 setup(
     name='searchguard',
-    version='0.1.1',
+    version='0.2',
     packages=find_packages(exclude=['tests']),
     url='https://github.com/ByteInternet/searchguard-python',
     author='Jeroen van Heugten',
