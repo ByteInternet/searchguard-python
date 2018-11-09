@@ -51,6 +51,24 @@ def create_user(username):
         raise CreateUserException('Error creating user {} - msg: {}'.format(username, create_sg_user.text))
 
 
+def modify_user(user, properties):
+    """Modifies a Search Guard user. Returns when successfully modified"""
+    if check_user_exists(user):
+        # The user does exist, let's modify it
+        modify_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, user),
+                                      data=json.dumps(properties), headers=HEADER, auth=TOKEN)
+
+        if modify_sg_user.status_code == 200:
+            # User modified successfully
+            return
+        else:
+            # Raise exception because we received an error when modifying the user
+            raise ModifyUserException('Error modifying user {} - msg: {}'.format(user, modify_sg_user.text))
+    else:
+        # Raise exception because the user does not exist
+        raise ModifyUserException('User {} does not exist'.format(user))
+
+
 def delete_user(username):
     """Deletes a Search Guard user. Returns when successfully deleted"""
     if not check_user_exists(username):
