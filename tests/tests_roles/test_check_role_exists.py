@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import unittest.mock as mock
-from unittest.mock import Mock
+import mock as mock
+from mock import Mock
 from tests.helper import BaseTestCase
 from searchguard.roles import check_role_exists
 from searchguard.exceptions import CheckRoleExistsException

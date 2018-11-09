@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-import unittest.mock as mock
-from unittest.mock import Mock
-from tests.helper import BaseTestCase
-from searchguard.internalusers import check_user_exists
+import mock as mock
+from mock import Mock
+
 from searchguard.exceptions import CheckUserExistsException
+from searchguard.internalusers import check_user_exists
+from tests.helper import BaseTestCase
 
 
 class TestCheckUserExists(BaseTestCase):
