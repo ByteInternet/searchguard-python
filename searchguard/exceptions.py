@@ -26,6 +26,10 @@ class ViewUserException(SearchGuardException):
     pass
 
 
+class ModifyUserException(SearchGuardException):
+    pass
+
+
 class ModifyRoleException(SearchGuardException):
     pass
 
