@@ -28,7 +28,7 @@ with suppress(OSError):
 
 setup(
     name='searchguard',
-    version='0.2',
+    version='0.3',
     packages=find_packages(exclude=['tests']),
     license='MIT',
     url='https://github.com/ByteInternet/searchguard-python',
