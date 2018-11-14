@@ -34,7 +34,7 @@ except ImportError:
 
 setup(
     name='searchguard',
-    version='0.3',
+    version='0.4',
     packages=find_packages(exclude=['tests']),
     license='MIT',
     url='https://github.com/ByteInternet/searchguard-python',
