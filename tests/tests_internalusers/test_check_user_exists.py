@@ -2,7 +2,6 @@
 
 import mock as mock
 from mock import Mock
-
 from searchguard.exceptions import CheckUserExistsException
 from searchguard.internalusers import check_user_exists
 from tests.helper import BaseTestCase

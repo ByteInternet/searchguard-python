@@ -19,6 +19,7 @@ install:
 
 script:
   - "tox"
+  - "python setup.py bdist_wheel -d dist"
 
 after_success:
   - "pip install dist/*.whl"
