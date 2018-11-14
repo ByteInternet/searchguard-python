@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import unittest.mock as mock
-from unittest.mock import Mock
+import mock as mock
+from mock import Mock
 from tests.helper import BaseTestCase
 from searchguard.roles import delete_role
 from searchguard.exceptions import DeleteRoleException

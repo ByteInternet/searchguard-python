@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 import json
-import unittest.mock as mock
-from unittest.mock import Mock
+import mock as mock
+from mock import Mock
 from tests.helper import BaseTestCase
 from searchguard.internalusers import list_users
 from searchguard.exceptions import ListUsersException

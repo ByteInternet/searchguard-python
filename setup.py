@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-from contextlib import suppress
 from setuptools import setup, find_packages
 
 project_root = os.path.dirname(__file__)
@@ -11,6 +10,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
@@ -22,7 +23,12 @@ classifiers = [
 
 long_description = ''
 
-with suppress(OSError):
+try:
+    from contextlib import suppress
+    with suppress(OSError):
+        with open(os.path.join(project_root, 'README.md'), 'rt') as readme_fh:
+            long_description = readme_fh.read()
+except ImportError:
     with open(os.path.join(project_root, 'README.md'), 'rt') as readme_fh:
         long_description = readme_fh.read()
 

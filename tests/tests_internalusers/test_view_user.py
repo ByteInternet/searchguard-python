@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import unittest.mock as mock
-from unittest.mock import Mock
+import mock as mock
+from mock import Mock
 from tests.helper import BaseTestCase
 from searchguard.internalusers import view_user
 from searchguard.exceptions import ViewUserException

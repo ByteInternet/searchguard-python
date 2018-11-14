@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
-import unittest.mock as mock
-from unittest.mock import Mock
-from tests.helper import BaseTestCase
+import mock as mock
+from mock import Mock
 from searchguard.roles import view_role
 from searchguard.exceptions import ViewRoleException
+from tests.helper import BaseTestCase
 
 
 class TestViewRole(BaseTestCase):

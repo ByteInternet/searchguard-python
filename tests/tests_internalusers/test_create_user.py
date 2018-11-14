@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 import json
-import unittest.mock as mock
+import mock as mock
 from tests.helper import BaseTestCase
-from unittest.mock import patch, Mock
+from mock import patch, Mock
 from searchguard.internalusers import create_user, password_generator
 from searchguard.exceptions import CreateUserException
 

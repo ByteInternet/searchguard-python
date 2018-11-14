@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 import json
-import unittest.mock as mock
+import mock as mock
 from tests.helper import BaseTestCase
-from unittest.mock import Mock
+from mock import Mock
 from searchguard.roles import create_role
 from searchguard.exceptions import CreateRoleException
 
