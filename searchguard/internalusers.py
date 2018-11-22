@@ -8,8 +8,6 @@ import string
 from searchguard.exceptions import *
 from searchguard.settings import HEADER, SGAPI, TOKEN
 
-warnings.filterwarnings("ignore")
-
 
 def password_generator(size=25, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     """Returns a random 25 character password"""

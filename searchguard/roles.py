@@ -6,8 +6,6 @@ import json
 from searchguard.exceptions import *
 from searchguard.settings import HEADER, SGAPI, TOKEN
 
-warnings.filterwarnings("ignore")
-
 
 def check_role_exists(role):
     """Returns True of False depending on whether the requested role exists in Search Guard"""
