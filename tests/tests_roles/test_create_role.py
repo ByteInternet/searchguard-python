@@ -5,7 +5,7 @@ import mock as mock
 from tests.helper import BaseTestCase
 from mock import Mock
 from searchguard.roles import create_role
-from searchguard.exceptions import CreateRoleException
+from searchguard.exceptions import CreateRoleException, RoleAlreadyExistsException
 
 
 class TestCreateRole(BaseTestCase):
@@ -22,16 +22,22 @@ class TestCreateRole(BaseTestCase):
         self.mocked_check_role_exists = self.set_up_patch('searchguard.roles.check_role_exists')
         self.mocked_check_role_exists.return_value = False
 
-    def test_create_role_returns_when_successfully_created_role(self):
+    def test_create_role_returns_none_when_successfully_created_role(self):
         self.assertIsNone(create_role(self.role, self.permissions))
 
-    def test_create_role_returns_exception_when_role_already_exists(self):
+    def test_create_role_raises_create_exception_when_role_already_exists(self):
         self.mocked_check_role_exists.return_value = True
 
         with self.assertRaises(CreateRoleException):
             create_role(self.role, self.permissions)
 
-    def test_create_role_returns_exception_when_requests_return_code_not_201(self):
+    def test_create_role_raises_specific_exception_when_role_already_exists(self):
+        self.mocked_check_role_exists.return_value = True
+
+        with self.assertRaises(RoleAlreadyExistsException):
+            create_role(self.role, self.permissions)
+
+    def test_create_role_raises_exception_when_requests_return_code_not_201(self):
         self.mocked_requests_put.return_value = Mock(status_code=999)
 
         with self.assertRaises(CreateRoleException):

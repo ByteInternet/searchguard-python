@@ -18,6 +18,10 @@ class CreateRoleException(SearchGuardException):
     pass
 
 
+class RoleAlreadyExistsException(CreateRoleException):
+    pass
+
+
 class DeleteRoleException(SearchGuardException):
     pass
 
