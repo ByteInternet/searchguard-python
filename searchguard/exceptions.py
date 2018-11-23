@@ -6,6 +6,10 @@ class CreateUserException(SearchGuardException):
     pass
 
 
+class UserAlreadyExistsException(CreateUserException):
+    pass
+
+
 class DeleteUserException(SearchGuardException):
     pass
 

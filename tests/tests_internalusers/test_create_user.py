@@ -5,7 +5,7 @@ import mock as mock
 from tests.helper import BaseTestCase
 from mock import patch, Mock
 from searchguard.internalusers import create_user, password_generator
-from searchguard.exceptions import CreateUserException
+from searchguard.exceptions import CreateUserException, UserAlreadyExistsException
 
 
 class TestCreateUser(BaseTestCase):
@@ -31,13 +31,19 @@ class TestCreateUser(BaseTestCase):
         ret = create_user(self.user)
         self.assertEqual(len(ret), 25)
 
-    def test_create_user_returns_exception_when_user_already_exists(self):
+    def test_create_user_raises_create_exception_when_user_already_exists(self):
         self.mocked_check_user_exists.return_value = True
 
         with self.assertRaises(CreateUserException):
             create_user(self.user)
 
-    def test_create_user_returns_exception_when_requests_return_code_not_201(self):
+    def test_create_user_raises_specific_exception_when_user_already_exists(self):
+        self.mocked_check_user_exists.return_value = True
+
+        with self.assertRaises(UserAlreadyExistsException):
+            create_user(self.user)
+
+    def test_create_user_raises_exception_when_requests_return_code_not_201(self):
         self.mocked_requests_put.return_value = Mock(status_code=999)
 
         with self.assertRaises(CreateUserException):
