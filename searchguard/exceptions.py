@@ -6,11 +6,19 @@ class CreateUserException(SearchGuardException):
     pass
 
 
+class UserAlreadyExistsException(CreateUserException):
+    pass
+
+
 class DeleteUserException(SearchGuardException):
     pass
 
 
 class CreateRoleException(SearchGuardException):
+    pass
+
+
+class RoleAlreadyExistsException(CreateRoleException):
     pass
 
 

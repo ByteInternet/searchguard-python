@@ -25,8 +25,10 @@ def check_role_exists(role):
 def create_role(role, permissions=None):
     """Creates a Search Guard role. Returns when successfully created
     When no permissions are specified, we use some default cluster permissions.
+
     :param str role: Name of the role to create in Search Guard
     :param dict permissions: Search Guard role permissions (default is read access to cluster)
+    :raises: RoleAlreadyExistsException, CreateRoleException
     """
     if not check_role_exists(role):
         # The role does not exist, let's create it
@@ -44,8 +46,7 @@ def create_role(role, permissions=None):
             # Raise exception because we received an error when creating the role
             raise CreateRoleException('Error creating role {} - msg: {}'.format(role, create_sg_role.text))
     else:
-        # Raise exception because the role already exists
-        raise CreateRoleException('Role {} already exists'.format(role))
+        raise RoleAlreadyExistsException('Role {} already exists'.format(role))
 
 
 def modify_role(role, permissions):

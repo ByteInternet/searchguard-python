@@ -30,10 +30,13 @@ def check_user_exists(username):
 
 
 def create_user(username):
-    """Creates a new Search Guard user and returns the generated password"""
+    """Creates a new Search Guard user and returns the generated password
+
+    :param str username: the username
+    :raises: UserAlreadyExistsException, CreateUserException
+    """
     if check_user_exists(username):
-        # Raise exception because the user already exists
-        raise CreateUserException('User {} already exists'.format(username))
+        raise UserAlreadyExistsException('User {} already exists'.format(username))
 
     # The username does not exist, let's create it
     password = password_generator()
