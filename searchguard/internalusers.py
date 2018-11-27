@@ -57,10 +57,9 @@ def create_user(username, password=None, properties=None):
     if 'hash' in properties:
         password = ''  # password is not effective, return empty string
     elif 'password' in properties:
-        password = properties['password']
+        password = properties['password']  # return the effective password
     else:
-        if not password:
-            password = password_generator()
+        password = password or password_generator()
         properties['password'] = password
 
     create_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, username),
