@@ -29,17 +29,20 @@ def check_user_exists(username):
         raise CheckUserExistsException('Unknown error checking whether user {} exists'.format(username))
 
 
-def create_user(username):
+def create_user(username, password=None):
     """Creates a new Search Guard user and returns the generated password
 
     :param str username: the username
+    :param str password: the password (by default will generate a password)
     :raises: UserAlreadyExistsException, CreateUserException
+    :return str: generated password
     """
     if check_user_exists(username):
         raise UserAlreadyExistsException('User {} already exists'.format(username))
 
     # The username does not exist, let's create it
-    password = password_generator()
+    if not password:
+        password = password_generator()
     payload = {'password': password}
     create_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, username),
                                   data=json.dumps(payload), headers=HEADER, auth=TOKEN)
