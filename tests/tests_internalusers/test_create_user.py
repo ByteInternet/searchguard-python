@@ -31,6 +31,15 @@ class TestCreateUser(BaseTestCase):
         ret = create_user(self.user)
         self.assertEqual(len(ret), 25)
 
+    def test_create_user_accepts_optional_password(self):
+        ret = create_user(self.user, 'sample_password')
+        self.assertEqual(ret, 'sample_password')
+
+    @patch('searchguard.internalusers.password_generator')
+    def test_create_user_wont_generate_password_if_its_passed_in(self, mock_password_generator):
+        ret = create_user(self.user, 'sample_password')
+        mock_password_generator.assert_not_called()
+
     def test_create_user_raises_create_exception_when_user_already_exists(self):
         self.mocked_check_user_exists.return_value = True
 
