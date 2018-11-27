@@ -29,23 +29,41 @@ def check_user_exists(username):
         raise CheckUserExistsException('Unknown error checking whether user {} exists'.format(username))
 
 
-def create_user(username, password=None):
+def create_user(username, password=None, properties=None):
     """Creates a new Search Guard user and returns the generated password
 
     :param str username: the username
     :param str password: the password (by default will generate a password)
-    :raises: UserAlreadyExistsException, CreateUserException
-    :return str: generated password
+    :param dict properties: dict of user properties (roles, attributes, hash, etc), matching
+    the API request body. Following the API, if "hash" is specified the password
+    won't be used, then the return value is empty string.
+    If password is passed both explicitly and as a property,
+    mismatching passwords would raise a ValueError.
+
+    :raises: UserAlreadyExistsException, CreateUserException, ValueError
+    :return str: password, or if hash is used empty string
     """
     if check_user_exists(username):
         raise UserAlreadyExistsException('User {} already exists'.format(username))
 
     # The username does not exist, let's create it
-    if not password:
-        password = password_generator()
-    payload = {'password': password}
+    if not properties:
+        properties = dict()
+
+    if 'password' in properties and password and (password != properties['password']):
+        raise ValueError("Password argument is different than 'password' property")
+
+    # decide returned password value and request body password according to arguments
+    if 'hash' in properties:
+        password = ''  # password is not effective, return empty string
+    elif 'password' in properties:
+        password = properties['password']  # return the effective password
+    else:
+        password = password or password_generator()
+        properties['password'] = password
+
     create_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, username),
-                                  data=json.dumps(payload), headers=HEADER, auth=TOKEN)
+                                  data=json.dumps(properties), headers=HEADER, auth=TOKEN)
 
     if create_sg_user.status_code == 201:
         # User created successfully
