@@ -12,7 +12,7 @@ class TestDeleteUser(BaseTestCase):
     def setUp(self):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_delete = self.set_up_patch('searchguard.internalusers.requests.delete')
         self.mocked_requests_delete.return_value = Mock(status_code=200)

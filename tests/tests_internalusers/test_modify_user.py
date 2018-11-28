@@ -14,7 +14,7 @@ class TestModifyUser(BaseTestCase):
         self.user = "DummyUser"
         self.properties = {"hash": "$2a$1234", "roles": ["DummyRole"]}
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_put = self.set_up_patch('searchguard.internalusers.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=200)
