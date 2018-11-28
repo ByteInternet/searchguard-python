@@ -6,7 +6,7 @@ import json
 import random
 import string
 from searchguard.exceptions import *
-from searchguard.settings import HEADER, SGAPI, TOKEN
+from searchguard.settings import HEADER, SGAPI, SEARCHGUARD_API_AUTH
 
 
 def password_generator(size=25, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
@@ -16,7 +16,7 @@ def password_generator(size=25, chars=string.ascii_uppercase + string.ascii_lowe
 
 def check_user_exists(username):
     """Returns True of False depending on whether the requested user exists in Search Guard"""
-    user_exists_check = requests.get('{}/internalusers/{}'.format(SGAPI, username), auth=TOKEN)
+    user_exists_check = requests.get('{}/internalusers/{}'.format(SGAPI, username), auth=SEARCHGUARD_API_AUTH)
 
     if user_exists_check.status_code == 200:
         # Username exists in SearchGuard
@@ -63,7 +63,7 @@ def create_user(username, password=None, properties=None):
         properties['password'] = password
 
     create_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, username),
-                                  data=json.dumps(properties), headers=HEADER, auth=TOKEN)
+                                  data=json.dumps(properties), headers=HEADER, auth=SEARCHGUARD_API_AUTH)
 
     if create_sg_user.status_code == 201:
         # User created successfully
@@ -78,7 +78,7 @@ def modify_user(user, properties):
     if check_user_exists(user):
         # The user does exist, let's modify it
         modify_sg_user = requests.put('{}/internalusers/{}'.format(SGAPI, user),
-                                      data=json.dumps(properties), headers=HEADER, auth=TOKEN)
+                                      data=json.dumps(properties), headers=HEADER, auth=SEARCHGUARD_API_AUTH)
 
         if modify_sg_user.status_code == 200:
             # User modified successfully
@@ -98,7 +98,7 @@ def delete_user(username):
         raise DeleteUserException('Error deleting the user {}, does not exist'.format(username))
 
     # The user does exist, let's delete it
-    delete_sg_user = requests.delete('{}/internalusers/{}'.format(SGAPI, username), auth=TOKEN)
+    delete_sg_user = requests.delete('{}/internalusers/{}'.format(SGAPI, username), auth=SEARCHGUARD_API_AUTH)
 
     if delete_sg_user.status_code != 200:
         # Raise exception because we could not delete the user
@@ -112,7 +112,7 @@ def view_user(user):
     """
     if check_user_exists(user):
         # The user does exist, let's view it
-        view_sg_user = requests.get('{}/internalusers/{}'.format(SGAPI, user), auth=TOKEN)
+        view_sg_user = requests.get('{}/internalusers/{}'.format(SGAPI, user), auth=SEARCHGUARD_API_AUTH)
 
         if view_sg_user.status_code == 200:
             return view_sg_user.text
@@ -130,7 +130,7 @@ def list_users(prefix=None, search=None):
     :param str prefix: Return only users that match this prefix (underscore is used as delimiter)
     :param str search: Return only users that contain this search string
     """
-    response = requests.get('{}/internalusers/'.format(SGAPI), auth=TOKEN)
+    response = requests.get('{}/internalusers/'.format(SGAPI), auth=SEARCHGUARD_API_AUTH)
 
     if response.status_code == 200:
         list_sg_users = json.loads(response.text)

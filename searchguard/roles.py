@@ -4,12 +4,12 @@ import requests
 import warnings
 import json
 from searchguard.exceptions import *
-from searchguard.settings import HEADER, SGAPI, TOKEN
+from searchguard.settings import HEADER, SGAPI, SEARCHGUARD_API_AUTH
 
 
 def check_role_exists(role):
     """Returns True of False depending on whether the requested role exists in Search Guard"""
-    role_exists_check = requests.get('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
+    role_exists_check = requests.get('{}/roles/{}'.format(SGAPI, role), auth=SEARCHGUARD_API_AUTH)
 
     if role_exists_check.status_code == 200:
         # Role exists in SearchGuard
@@ -37,7 +37,7 @@ def create_role(role, permissions=None):
         if permissions:
             payload = permissions
         create_sg_role = requests.put('{}/roles/{}'.format(SGAPI, role),
-                                      data=json.dumps(payload), headers=HEADER, auth=TOKEN)
+                                      data=json.dumps(payload), headers=HEADER, auth=SEARCHGUARD_API_AUTH)
 
         if create_sg_role.status_code == 201:
             # Role created successfully
@@ -54,7 +54,7 @@ def modify_role(role, permissions):
     if check_role_exists(role):
         # The role does exist, let's modify it
         modify_sg_role = requests.put('{}/roles/{}'.format(SGAPI, role),
-                                      data=json.dumps(permissions), headers=HEADER, auth=TOKEN)
+                                      data=json.dumps(permissions), headers=HEADER, auth=SEARCHGUARD_API_AUTH)
 
         if modify_sg_role.status_code == 200:
             # Role modified successfully
@@ -71,7 +71,7 @@ def delete_role(role):
     """Deletes a Search Guard roles. Returns when successfully deleted"""
     if check_role_exists(role):
         # The role does exist, let's delete it
-        delete_sg_role = requests.delete('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
+        delete_sg_role = requests.delete('{}/roles/{}'.format(SGAPI, role), auth=SEARCHGUARD_API_AUTH)
 
         if delete_sg_role.status_code == 200:
             # Role deleted successfully
@@ -88,7 +88,7 @@ def view_role(role):
     """Returns the permissions for the requested role if it exists"""
     if check_role_exists(role):
         # The role does exist, let's view it
-        view_sg_role = requests.get('{}/roles/{}'.format(SGAPI, role), auth=TOKEN)
+        view_sg_role = requests.get('{}/roles/{}'.format(SGAPI, role), auth=SEARCHGUARD_API_AUTH)
 
         if view_sg_role.status_code == 200:
             return view_sg_role.text
