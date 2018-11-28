@@ -31,8 +31,6 @@ Set the environment variables
 
 * Add code for managing rolesmapping
 * Add code for managing actiongroups
-* Allow password customization (e.g. length)
-* Add optional password argument to create_user
 
 ## Legal
 
