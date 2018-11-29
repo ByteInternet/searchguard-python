@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import json
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from tests.helper import BaseTestCase
 from searchguard.internalusers import modify_user
 from searchguard.exceptions import ModifyUserException
@@ -14,7 +13,7 @@ class TestModifyUser(BaseTestCase):
         self.user = "DummyUser"
         self.properties = {"hash": "$2a$1234", "roles": ["DummyRole"]}
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_put = self.set_up_patch('searchguard.internalusers.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=200)
@@ -43,7 +42,7 @@ class TestModifyUser(BaseTestCase):
     def test_modify_user_calls_requests_with_correct_arguments(self):
         modify_user(self.user, self.properties)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.properties),
                                                          headers={'content-type': 'application/json'})
 

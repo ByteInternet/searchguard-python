@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from searchguard.roles import view_role
 from searchguard.exceptions import ViewRoleException
 from tests.helper import BaseTestCase
@@ -13,7 +12,7 @@ class TestViewRole(BaseTestCase):
         self.role = "DummyRole"
         self.permissions = {"cluster": ["dummyperm"], "indices": {"dummyindice": {"dummytype": ["READ"]}}}
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.roles.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_get = self.set_up_patch('searchguard.roles.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)
@@ -45,4 +44,4 @@ class TestViewRole(BaseTestCase):
     def test_view_role_calls_requests_with_correct_arguments(self):
         view_role(self.role)
         self.mocked_requests_get.assert_called_once_with('{}{}'.format(self.api_url, self.role),
-                                                         auth=(mock.ANY, mock.ANY))
+                                                         auth=(ANY, ANY))

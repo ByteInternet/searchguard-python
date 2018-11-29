@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
 import json
-import mock as mock
 from tests.helper import BaseTestCase
-from mock import patch, Mock
+from mock import patch, Mock, ANY
 from searchguard.internalusers import create_user, password_generator
 from searchguard.exceptions import CreateUserException, UserAlreadyExistsException
 
@@ -21,7 +20,7 @@ class TestCreateUser(BaseTestCase):
             }
         }
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_put = self.set_up_patch('searchguard.internalusers.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=201)
@@ -115,7 +114,7 @@ class TestCreateUser(BaseTestCase):
         create_user(self.user)
         data = {"password": "abc1234"}
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(data),
                                                          headers={'content-type': 'application/json'})
 
@@ -123,7 +122,7 @@ class TestCreateUser(BaseTestCase):
         create_user(self.user, "efg5678")
         data = {"password": "efg5678"}
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(data),
                                                          headers={'content-type': 'application/json'})
 
@@ -131,7 +130,7 @@ class TestCreateUser(BaseTestCase):
         self.properties['hash'] = 'buYQkJcKxsz4JO50X8SqbJE9Cth5dJI'
         create_user(self.user, properties=self.properties)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.properties),
                                                          headers={'content-type': 'application/json'})
 
@@ -140,20 +139,20 @@ class TestCreateUser(BaseTestCase):
         del self.properties['password']
         create_user(self.user, properties=self.properties)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.properties),
                                                          headers={'content-type': 'application/json'})
 
     def test_create_user_calls_api_with_correct_arguments_when_properties_has_password_only(self):
         create_user(self.user, properties=self.properties)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.properties),
                                                          headers={'content-type': 'application/json'})
 
     def test_create_user_calls_api_with_correct_arguments_when_password_matches_properties(self):
         create_user(self.user, 'abcd1234', self.properties)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.properties),
                                                          headers={'content-type': 'application/json'})

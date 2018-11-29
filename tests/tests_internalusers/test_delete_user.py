@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from tests.helper import BaseTestCase
 from searchguard.internalusers import delete_user
 from searchguard.exceptions import DeleteUserException
@@ -12,7 +11,7 @@ class TestDeleteUser(BaseTestCase):
     def setUp(self):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_delete = self.set_up_patch('searchguard.internalusers.requests.delete')
         self.mocked_requests_delete.return_value = Mock(status_code=200)
@@ -41,4 +40,4 @@ class TestDeleteUser(BaseTestCase):
     def test_delete_user_calls_requests_with_correct_arguments(self):
         delete_user(self.user)
         self.mocked_requests_delete.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                            auth=(mock.ANY, mock.ANY))
+                                                            auth=(ANY, ANY))

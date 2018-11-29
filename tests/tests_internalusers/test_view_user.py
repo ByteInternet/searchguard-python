@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from tests.helper import BaseTestCase
 from searchguard.internalusers import view_user
 from searchguard.exceptions import ViewUserException
@@ -13,7 +12,7 @@ class TestViewUser(BaseTestCase):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
         self.user_data = {"DummyUser": {"roles": ["BackendRole"], "hash": "hash1234"}}
-        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_get = self.set_up_patch('searchguard.internalusers.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)
@@ -45,4 +44,4 @@ class TestViewUser(BaseTestCase):
     def test_view_user_calls_requests_with_correct_arguments(self):
         view_user(self.user)
         self.mocked_requests_get.assert_called_once_with('{}{}'.format(self.api_url, self.user),
-                                                         auth=(mock.ANY, mock.ANY))
+                                                         auth=(ANY, ANY))
