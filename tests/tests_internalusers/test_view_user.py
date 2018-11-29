@@ -13,7 +13,7 @@ class TestViewUser(BaseTestCase):
         self.user = "DummyUser"
         self.api_url = "fake_api_url/internalusers/"
         self.user_data = {"DummyUser": {"roles": ["BackendRole"], "hash": "hash1234"}}
-        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_get = self.set_up_patch('searchguard.internalusers.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)

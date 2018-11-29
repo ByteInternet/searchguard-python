@@ -12,7 +12,7 @@ class TestCheckRoleExists(BaseTestCase):
     def setUp(self):
         self.role = "DummyRole"
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.roles.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.roles.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_get = self.set_up_patch('searchguard.roles.requests.get')
         self.mocked_requests_get.return_value = Mock(status_code=200)

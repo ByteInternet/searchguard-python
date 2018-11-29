@@ -12,7 +12,7 @@ class TestListUsers(BaseTestCase):
 
     def setUp(self):
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SGAPI', "fake_api_url")
+        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.user_list_pt1 = {"dummyuser1": {"hash": "123"}}
         self.user_list_pt2 = {"999_dummyuser2": {"hash": "456", "roles": ["dummyrole2"]}}
