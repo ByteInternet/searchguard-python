@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import json
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from tests.helper import BaseTestCase
 from searchguard.roles import modify_role
 from searchguard.exceptions import ModifyRoleException
@@ -14,7 +13,7 @@ class TestModifyRole(BaseTestCase):
         self.role = "DummyRole"
         self.permissions = {"cluster": ["dummyperm"], "indices": {"dummyindice": {"dummytype": ["READ"]}}}
         self.api_url = "fake_api_url/roles/"
-        self.set_up_patch('searchguard.roles.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.mocked_requests_put = self.set_up_patch('searchguard.roles.requests.put')
         self.mocked_requests_put.return_value = Mock(status_code=200)
@@ -43,7 +42,7 @@ class TestModifyRole(BaseTestCase):
     def test_modify_role_calls_requests_with_correct_arguments(self):
         modify_role(self.role, self.permissions)
         self.mocked_requests_put.assert_called_once_with('{}{}'.format(self.api_url, self.role),
-                                                         auth=(mock.ANY, mock.ANY),
+                                                         auth=(ANY, ANY),
                                                          data=json.dumps(self.permissions),
                                                          headers={'content-type': 'application/json'})
 

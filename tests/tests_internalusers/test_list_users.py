@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import json
-import mock as mock
-from mock import Mock
+from mock import Mock, ANY
 from tests.helper import BaseTestCase
 from searchguard.internalusers import list_users
 from searchguard.exceptions import ListUsersException
@@ -12,7 +11,7 @@ class TestListUsers(BaseTestCase):
 
     def setUp(self):
         self.api_url = "fake_api_url/internalusers/"
-        self.set_up_patch('searchguard.internalusers.SEARCHGUARD_API_URL', "fake_api_url")
+        self.set_up_patch('searchguard.settings.SEARCHGUARD_API_URL', "fake_api_url")
 
         self.user_list_pt1 = {"dummyuser1": {"hash": "123"}}
         self.user_list_pt2 = {"999_dummyuser2": {"hash": "456", "roles": ["dummyrole2"]}}
@@ -58,4 +57,4 @@ class TestListUsers(BaseTestCase):
     def test_list_users_calls_requests_with_correct_arguments(self):
         list_users()
 
-        self.mocked_requests_get.assert_called_once_with('{}'.format(self.api_url), auth=(mock.ANY, mock.ANY))
+        self.mocked_requests_get.assert_called_once_with('{}'.format(self.api_url), auth=(ANY, ANY))
