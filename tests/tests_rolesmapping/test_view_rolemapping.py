@@ -23,9 +23,9 @@ class TestViewRoleMapping(BaseTestCase):
     def test_view_rolemapping_returns_role_information_when_correctly_called(self):
 
         ret = view_rolemapping(self.role)
-        assert ret == self.permissions
+        self.assertEqual(ret, self.permissions)
 
-    def test_view_rolemapping_returns_exception_when_role_does_not_exist(self):
+    def test_view_rolemapping_raises_exception_when_role_does_not_exist(self):
         self.mocked_check_rolemapping_exists.return_value = False
 
         with self.assertRaises(ViewRoleMappingException):

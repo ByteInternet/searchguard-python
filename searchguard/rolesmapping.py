@@ -3,18 +3,19 @@
 import requests
 import json
 import searchguard.settings as settings
-from searchguard.exceptions import *
+from searchguard.exceptions import RoleMappingException, CheckRoleMappingExistsException, ViewRoleMappingException, \
+    DeleteRoleMappingException, CreateRoleMappingException, ModifyRoleMappingException, CheckRoleExistsException
 from searchguard.roles import check_role_exists
 
 
-def __process_data(role, properties):
+def _send_api_request(role, properties):
     """Private function to process API calls for the rolemapping module"""
     create_sg_rolemapping = requests.put('{}/rolesmapping/{}'.format(settings.SEARCHGUARD_API_URL, role),
                                          data=json.dumps(properties),
                                          headers=settings.HEADER,
                                          auth=settings.SEARCHGUARD_API_AUTH)
 
-    if create_sg_rolemapping.status_code == 201 or create_sg_rolemapping.status_code == 200:
+    if create_sg_rolemapping.status_code in (200, 201):
         # Role mapping created or updated successfully
         return
 
@@ -95,7 +96,7 @@ def create_rolemapping(role, properties):
         raise CreateRoleMappingException('Error creating mapping for role {} - Include at least one of: users, '
                                          'backendroles or hosts keys in the properties argument'.format(role))
 
-    __process_data(role, properties)
+    _send_api_request(role, properties)
     return
 
 
@@ -137,7 +138,7 @@ def modify_rolemapping(role, properties, action="replace"):
         rolemapping[role]['hosts'] = \
             sorted(set(rolemapping[role]['hosts'] + properties.get('hosts', [])))
 
-        __process_data(role, rolemapping[role])
+        _send_api_request(role, rolemapping[role])
         return
 
     if action is "split":
@@ -150,8 +151,8 @@ def modify_rolemapping(role, properties, action="replace"):
         rolemapping[role]['hosts'] = [item for item in rolemapping[role]['hosts']
                                       if item not in properties['hosts']]
 
-        __process_data(role, rolemapping[role])
+        _send_api_request(role, rolemapping[role])
         return
 
     # No merge or split action, overwrite existing properties:
-    __process_data(role, properties)
+    _send_api_request(role, properties)

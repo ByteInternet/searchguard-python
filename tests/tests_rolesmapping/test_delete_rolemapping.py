@@ -21,7 +21,7 @@ class TestDeleteRoleMapping(BaseTestCase):
     def test_delete_rolemapping_returns_when_successfully_deleted_role(self):
         self.assertIsNone(delete_rolemapping(self.role))
 
-    def test_delete_rolemapping_returns_exception_when_user_does_not_exist(self):
+    def test_delete_rolemapping_raises_exception_when_user_does_not_exist(self):
         self.mocked_check_rolemapping_exists.return_value = False
 
         with self.assertRaises(DeleteRoleMappingException):
@@ -32,10 +32,6 @@ class TestDeleteRoleMapping(BaseTestCase):
 
         with self.assertRaises(DeleteRoleMappingException):
             delete_rolemapping(self.role)
-
-    def test_delete_rolemapping_calls_check_role_exist(self):
-        delete_rolemapping(self.role)
-        self.mocked_check_rolemapping_exists.assert_called_once_with(self.role)
 
     def test_delete_role_calls_requests_with_correct_arguments(self):
         delete_rolemapping(self.role)
