@@ -8,6 +8,9 @@ from searchguard.exceptions import RoleMappingException, CheckRoleMappingExistsE
 from searchguard.roles import check_role_exists
 
 
+PROPERTIES_KEYS = {"users", "backendroles", "hosts"}
+
+
 def _send_api_request(role, properties):
     """Private function to process API calls for the rolemapping module"""
     create_sg_rolemapping = requests.put('{}/rolesmapping/{}'.format(settings.SEARCHGUARD_API_URL, role),
@@ -42,20 +45,17 @@ def check_rolemapping_exists(role):
 
 def view_rolemapping(role):
     """Returns the properties for the requested role mapping if it exists"""
-    if check_rolemapping_exists(role):
-        # The role mapping does exist, let's view it
-        view_sg_rolemapping = requests.get('{}/rolesmapping/{}'.format(settings.SEARCHGUARD_API_URL, role),
-                                           auth=settings.SEARCHGUARD_API_AUTH)
+    view_sg_rolemapping = requests.get('{}/rolesmapping/{}'.format(settings.SEARCHGUARD_API_URL, role),
+                                       auth=settings.SEARCHGUARD_API_AUTH)
 
-        if view_sg_rolemapping.status_code == 200:
-            return json.loads(view_sg_rolemapping.text)
-        else:
-            # Raise exception because we could not view the role mapping
-            raise ViewRoleMappingException('Error viewing the role mapping for {} - msg {}'.format(
-                role, view_sg_rolemapping.text))
-    else:
+    if view_sg_rolemapping.status_code == 200:
+        return json.loads(view_sg_rolemapping.text)
+    elif view_sg_rolemapping.status_code == 404:
         # Raise exception because the role mapping does not exist
         raise ViewRoleMappingException('Error viewing the role mapping for {}, does not exist'.format(role))
+    else:
+        # Could not fetch valid output
+        raise ViewRoleMappingException('Unknown error checking whether role mapping for {} exists'.format(role))
 
 
 def delete_rolemapping(role):
@@ -89,9 +89,7 @@ def create_rolemapping(role, properties):
     if not check_role_exists(role):
         raise CheckRoleExistsException('Role {} does not exist'.format(role))
 
-    properties_keys = {"users", "backendroles", "hosts"}
-
-    if not any(key in properties for key in properties_keys):
+    if not any(key in properties for key in PROPERTIES_KEYS):
         # Raise exception because we did not receive valid properties
         raise CreateRoleMappingException('Error creating mapping for role {} - Include at least one of: users, '
                                          'backendroles or hosts keys in the properties argument'.format(role))
@@ -115,16 +113,14 @@ def modify_rolemapping(role, properties, action="replace"):
     if not check_rolemapping_exists(role):
         raise ModifyRoleMappingException('Mapping for role {} does not exist'.format(role))
 
-    properties_keys = {"users", "backendroles", "hosts"}
-
-    if not any(key in properties for key in properties_keys):
+    if not any(key in properties for key in PROPERTIES_KEYS):
         # Raise exception because we did not receive valid properties
-        raise ModifyRoleMappingException('Error modifying mapping for role {} - Include at least one of: users, '
-                                         'backendroles or hosts keys in the properties argument'.format(role))
+        raise ValueError('Error modifying mapping for role {} - Include at least one of: users, '
+                         'backendroles or hosts keys in the properties argument'.format(role))
 
     # Retrieve existing properties of the role mapping:
     rolemapping = view_rolemapping(role)
-    for property in properties_keys:
+    for property in PROPERTIES_KEYS:
         if property not in rolemapping[role]:
             rolemapping[role][property] = list()
 

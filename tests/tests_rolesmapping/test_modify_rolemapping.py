@@ -53,7 +53,7 @@ class TestModifyRoleMapping(BaseTestCase):
 
     def test_modify_rolemapping_raises_exception_when_essential_keys_missing_in_properties(self):
 
-        with self.assertRaises(ModifyRoleMappingException):
+        with self.assertRaises(ValueError):
             modify_rolemapping(self.role, self.properties_invalid)
 
     def test_modify_rolemapping_creates_empty_lists_for_non_existent_properties(self):
