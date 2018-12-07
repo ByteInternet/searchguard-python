@@ -52,3 +52,27 @@ class CheckUserExistsException(SearchGuardException):
 
 class CheckRoleExistsException(SearchGuardException):
     pass
+
+
+class RoleMappingException(SearchGuardException):
+    pass
+
+
+class CreateRoleMappingException(SearchGuardException):
+    pass
+
+
+class CheckRoleMappingExistsException(SearchGuardException):
+    pass
+
+
+class ModifyRoleMappingException(SearchGuardException):
+    pass
+
+
+class ViewRoleMappingException(SearchGuardException):
+    pass
+
+
+class DeleteRoleMappingException(SearchGuardException):
+    pass
