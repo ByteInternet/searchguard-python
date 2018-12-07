@@ -29,7 +29,6 @@ Set the environment variables
 
 ## Future work ##
 
-* Add code for managing rolesmapping
 * Add code for managing actiongroups
 
 ## Legal
