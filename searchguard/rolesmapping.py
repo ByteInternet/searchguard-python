@@ -105,7 +105,7 @@ def modify_rolemapping(role, properties, action="replace"):
 
     :param str role: Name of the role mapping to create in Search Guard
     :param dict properties: Search Guard role mapping fields (users, backendroles and/or hosts)
-    :param boolean action: Defines what to do with the properties. Defaults to replace (overwrites existing
+    :param str action: Defines what to do with the properties. Defaults to replace (overwrites existing
     properties). Other options are merge (combine the properties with existing ones) or split
     (removes the properties from existing ones)
     :raises: ModifyRoleMappingException
