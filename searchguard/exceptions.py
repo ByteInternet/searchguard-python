@@ -70,6 +70,10 @@ class ModifyRoleMappingException(SearchGuardException):
     pass
 
 
+class ViewAllRoleMappingException(SearchGuardException):
+    pass
+
+
 class ViewRoleMappingException(SearchGuardException):
     pass
 
