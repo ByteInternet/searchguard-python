@@ -152,3 +152,22 @@ def modify_rolemapping(role, properties, action="replace"):
 
     # No merge or split action, overwrite existing properties:
     _send_api_request(role, properties)
+
+
+def list_rolemappings_for_user(user, roles):
+    """Get list of rolemappings that contain the given user.
+
+    :param str user: Name of user
+    :param list roles: List of rolemappings to be checked for the given user
+    :returns list: list of rolemappings with the given user
+    :raises: ViewRoleMappingException
+    """
+    user_rolemappings = []
+
+    for role in roles:
+        rolemapping = view_rolemapping(role)
+
+        if user in rolemapping[role]['users']:
+            user_rolemappings.append(role)
+
+    return user_rolemappings
