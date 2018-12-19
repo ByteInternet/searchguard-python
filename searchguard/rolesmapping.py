@@ -45,7 +45,7 @@ def check_rolemapping_exists(role):
 
 
 def view_all_rolemappings():
-    """Returns the properties for the requested role mapping if it exists"""
+    """Returns the properties for the requested role mappings if it exists"""
     view_all_sg_rolemapping = requests.get('{}/rolesmapping/'.format(settings.SEARCHGUARD_API_URL),
                                            auth=settings.SEARCHGUARD_API_AUTH)
 
@@ -53,7 +53,7 @@ def view_all_rolemappings():
         return json.loads(view_all_sg_rolemapping.text)
     else:
         # Could not fetch valid output
-        raise ViewAllRoleMappingException('Unknown error retrieving all role mapping')
+        raise ViewAllRoleMappingException('Unknown error retrieving all role mappings')
 
 
 def view_rolemapping(role):
