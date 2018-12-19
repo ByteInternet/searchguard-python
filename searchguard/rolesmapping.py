@@ -4,7 +4,8 @@ import requests
 import json
 import searchguard.settings as settings
 from searchguard.exceptions import RoleMappingException, CheckRoleMappingExistsException, ViewRoleMappingException, \
-    DeleteRoleMappingException, CreateRoleMappingException, ModifyRoleMappingException, CheckRoleExistsException
+    DeleteRoleMappingException, CreateRoleMappingException, ModifyRoleMappingException, CheckRoleExistsException, \
+    ViewAllRoleMappingException
 from searchguard.roles import check_role_exists
 
 
@@ -41,6 +42,18 @@ def check_rolemapping_exists(role):
     else:
         # Could not fetch valid output
         raise CheckRoleMappingExistsException('Unknown error checking whether role mapping for {} exists'.format(role))
+
+
+def view_all_rolemappings():
+    """Returns the properties for the requested role mappings if it exists"""
+    view_all_sg_rolemapping = requests.get('{}/rolesmapping/'.format(settings.SEARCHGUARD_API_URL),
+                                           auth=settings.SEARCHGUARD_API_AUTH)
+
+    if view_all_sg_rolemapping.status_code == 200:
+        return json.loads(view_all_sg_rolemapping.text)
+    else:
+        # Could not fetch valid output
+        raise ViewAllRoleMappingException('Unknown error retrieving all role mappings')
 
 
 def view_rolemapping(role):
@@ -152,3 +165,20 @@ def modify_rolemapping(role, properties, action="replace"):
 
     # No merge or split action, overwrite existing properties:
     _send_api_request(role, properties)
+
+
+def list_rolemappings_for_user(user, roles=None):
+    """Get list of rolemappings that contain the given user. It is possible to add a list of roles to check.
+    If no list is added, all rolemappings are evaluated.
+
+    :param str user: Name of user
+    :param list roles: List of rolemappings to be checked for the given user
+    :returns list: list of rolemappings with the given user
+    :raises: ViewRoleMappingException
+    """
+    if roles:
+        user_rolemappings = [role for role in roles if user in view_rolemapping(role)[role]['users']]
+    else:
+        user_rolemappings = [r for r, p in view_all_rolemappings().items() if user in p['users']]
+
+    return sorted(set(user_rolemappings))
