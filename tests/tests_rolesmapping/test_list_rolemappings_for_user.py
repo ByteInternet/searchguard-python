@@ -39,8 +39,9 @@ class TestListRolemappingsForUser(BaseTestCase):
         ret = list_rolemappings_for_user(self.user, self.roles)
         self.assertEqual(ret, [])
 
-    def test_list_rolemappings_for_user_raises_exception_when_role_does_not_exist(self):
+    def test_list_rolemappings_for_user_returns_list_without_rolemappings_that_raise_exception(self):
         self.mock_view_rolemapping.side_effect = [self.all_roles[0], ViewRoleMappingException, self.all_roles[2]]
 
-        with self.assertRaises(ViewRoleMappingException):
-            list_rolemappings_for_user(self.user, self.roles)
+        ret = list_rolemappings_for_user(self.user, self.roles)
+
+        self.assertListEqual(ret, ['role0', 'role2'])

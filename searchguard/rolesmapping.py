@@ -169,7 +169,7 @@ def modify_rolemapping(role, properties, action="replace"):
 
 def list_rolemappings_for_user(user, roles=None):
     """Get list of rolemappings that contain the given user. It is possible to add a list of roles to check.
-    If no list is added, all rolemappings are evaluated.
+    If no list is added, all rolemappings are evaluated. Non-existant roles are excluded.
 
     :param str user: Name of user
     :param list roles: List of rolemappings to be checked for the given user
@@ -177,7 +177,14 @@ def list_rolemappings_for_user(user, roles=None):
     :raises: ViewRoleMappingException
     """
     if roles:
-        user_rolemappings = [role for role in roles if user in view_rolemapping(role)[role]['users']]
+        user_rolemappings = list()
+
+        for role in roles:
+            try:
+                if user in view_rolemapping(role)[role]['users']:
+                    user_rolemappings.append(role)
+            except ViewRoleMappingException:
+                pass
     else:
         user_rolemappings = [r for r, p in view_all_rolemappings().items() if user in p['users']]
 
