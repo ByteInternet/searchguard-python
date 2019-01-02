@@ -169,7 +169,7 @@ def modify_rolemapping(role, properties, action="replace"):
 
 def list_rolemappings_for_user(user, roles=None, skip_missing_roles=False):
     """Get list of rolemappings that contain the given user. It is possible to add a list of roles to check.
-    If no list is added, all rolemappings are evaluated. Non-existent roles are excluded.
+    If no list is added, all rolemappings are evaluated. Non-existent roles can be excluded.
 
     :param str user: Name of user
     :param list roles: List of rolemappings to be checked for the given user
